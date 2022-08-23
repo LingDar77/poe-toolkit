@@ -1,27 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <Topbar></Topbar>
+    <MainBody></MainBody>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+<script setup lang="ts">
+import Topbar from "@/components/Topbar.vue";
+import MainBody from "@/components/MainBody.vue";
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-});
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="less">
+@font-face {
+    font-family: 'FiraCodeRetina';
+    src: url("assets/fonts/FiraCode-Retina.ttf");
+}
+
+* {
+    font-family: 'FiraCodeRetina';
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
 }
 </style>
