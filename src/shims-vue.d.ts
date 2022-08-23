@@ -4,9 +4,15 @@ declare module '*.vue' {
   const Component: ReturnType<typeof defineComponent>
   export interface IElectronAPI
   {
-   ipc:IpcRenderer,
-   maximized: (callback: (e: IpcRendererEvent, maximized: boolean) => void) => void,
-   resize: (callback: (e: IpcRendererEvent, size:number[]) => void) => void,
+    minimize: () => void,
+    maximize: (maximized:boolean) => void,
+    close: () => void,
+    maximized: (callback: (e: IpcRendererEvent, maximized: boolean) => void) => void,
+    resize: (callback: (e: IpcRendererEvent, size: number[]) => void) => void,
+    setAsTray: (callback: (e: IpcRendererEvent, setted: boolean) => void) => void,
+    toggleDark: (isDark: boolean) => void,    
+    toggledDark: (callback: (e: IpcRendererEvent, isDark: boolean) => void) => void,
+    focusTray: (callback: () => void) => void,
   }
 
   declare global

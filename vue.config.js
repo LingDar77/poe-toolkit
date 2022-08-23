@@ -8,6 +8,13 @@ module.exports = defineConfig({
   pluginOptions: {
     electronBuilder: {
       preload: './src/preload.ts',
+      builderOptions:
+      {
+        win:
+        {
+          icon: 'src/assets/logo.ico',
+        }
+      }
     },
   },
   configureWebpack: {

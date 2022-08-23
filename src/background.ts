@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Tray, nativeImage, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, } from 'electron'
+import { Tray, nativeImage } from "electron";
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
@@ -12,79 +13,135 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-function RegisterHandlers(window: BrowserWindow)
+function RegisterHandlers(mainWindow: BrowserWindow, trayWindow: BrowserWindow)
 {
   ipcMain.on('window.minimize', () =>
   {
-    window.minimize();
+    mainWindow.minimize();
   });
   ipcMain.on('window.maximize', (e, maximized: boolean) =>
   {
     if (maximized)
-      window.unmaximize()
+      mainWindow.unmaximize()
     else
-      window.maximize();
+      mainWindow.maximize();
   });
   ipcMain.on('window.close', () =>
   {
-    window.close();
+    mainWindow.close();
   });
-  window.on('maximize', () =>
+  mainWindow.on('maximize', () =>
   {
-    window.webContents.send('window.maximized', true);
-    window.webContents.send('window.resized', window.getSize());
+    mainWindow.webContents.send('window.maximized', true);
+    mainWindow.webContents.send('window.resized', mainWindow.getSize());
   });
-  window.on('unmaximize', () =>
+  mainWindow.on('unmaximize', () =>
   {
-    window.webContents.send('window.maximized', false);
-    window.webContents.send('window.resized', window.getSize());
+    mainWindow.webContents.send('window.maximized', false);
+    mainWindow.webContents.send('window.resized', mainWindow.getSize());
   });
-  window.on('resize', () =>
+  mainWindow.on('resize', () =>
   {
-    window.webContents.send('window.resized', window.getSize());
+    mainWindow.webContents.send('window.resized', mainWindow.getSize());
+  });
+
+  ipcMain.on('renderer.toggledDark', (e, isDark: boolean) =>
+  {
+    trayWindow.webContents.send('renderer.toggledDark', isDark);
   });
 }
 
-
-function Init(window: BrowserWindow)
+function BuildMenu(tray: Tray, window: BrowserWindow)
 {
-  let icon = nativeImage.createFromPath('src\\assets\\logo.png');
-  let tray = new Tray(icon);
-  RegisterHandlers(window);
-}
-
-
-async function createWindow()
-{
-  // Create the browser window.
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minHeight: 600,
-    minWidth: 800,
+  const trayWindow = new BrowserWindow({
+    width: 240,
+    height: 400,
     frame: false,
+    alwaysOnTop: true,
+    show: false,
+    resizable: false,
     hasShadow: true,
+    parent: window,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      contextIsolation: !(process.env
+        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+      preload: path.join(__dirname, 'preload.js'),
+    }
+  });
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    trayWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
+  } else {
+    createProtocol('app')
+    // Load the index.html when not in development
+    trayWindow.loadURL('app://./index.html')
+  }
+  trayWindow.on('ready-to-show', () => { trayWindow.webContents.send('tray', true) })
+  trayWindow.on('blur', () =>
+  {
+    //lose focus
+    trayWindow.hide();
+
+  })
+  tray.addListener('right-click', (keyborad, rect) =>
+  {
+    // console.log(keyborad, rect);
+    trayWindow.webContents.send('tray.focus');
+    trayWindow.setPosition(rect.x - 240 + rect.width / 2, rect.y - 400 + rect.height / 2);
+    trayWindow.show();
+  });
+  tray.addListener('double-click', () =>
+  {
+    window.show();
+  })
+
+  return trayWindow;
+}
+
+async function createWindow()
+{
+  let icon = nativeImage.createFromPath('src/assets/logo.ico');
+
+  // Create the browser window.
+  const mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    minHeight: 600,
+    minWidth: 800,
+    frame: false,
+    hasShadow: true,
+    icon: icon,
+    webPreferences: {
+
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: (process.env
+        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+      contextIsolation: !(process.env
+        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
       preload: path.join(__dirname, 'preload.js'),
     }
   })
 
-  Init(win);
+  mainWindow.on('ready-to-show', () => { mainWindow.webContents.send('tray', false) })
+
+  let trayWindow = BuildMenu(new Tray(icon), mainWindow);
+
+  RegisterHandlers(mainWindow, trayWindow);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
+    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    mainWindow.loadURL('app://./index.html')
   }
 
 }

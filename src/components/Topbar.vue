@@ -1,10 +1,8 @@
 <template >
     <div class="header">
-        <el-image :src="'./favicon.ico'" fit="fill" :lazy="true" style="height:16px; width:16px; padding-top:4px">
-        </el-image>
         PoE Toolkit
         <span class="btns">
-            <el-icon class="dark" size="24px" @click.prevent="toggleDark()">
+            <el-icon class="dark" size="24px" @click="toggleDark">
                 <svg v-if="!isDark" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
                     <path fill="currentColor"
                         d="M240.448 240.448a384 384 0 1 0 559.424 525.696 448 448 0 0 1-542.016-542.08 390.592 390.592 0 0 0-17.408 16.384zm181.056 362.048a384 384 0 0 0 525.632 16.384A448 448 0 1 1 405.056 76.8a384 384 0 0 0 16.448 525.696z">
@@ -50,22 +48,25 @@ import { ref } from "vue";
 import { useDark, useToggle } from '@vueuse/core';
 
 const isDark = useDark();
-const toggleDark = useToggle(isDark);
+function toggleDark(){
+   useToggle(isDark)();
+   window.background.toggleDark(isDark.value);
+}
 
 let maximized = ref(false);
 const minimize = () =>
 {
-    window.background.ipc.send('window.minimize');
+    window.background.minimize();
 }
 
 const maximize = () =>
 {
-    window.background.ipc.send('window.maximize', maximized.value);
+    window.background.maximize(maximized.value);
     maximized.value = !maximized.value;
 }
 const close = () =>
 {
-    window.background.ipc.send('window.close');
+    window.background.close();
 }
 
 
@@ -78,7 +79,6 @@ window.background.maximized((e, max) =>
 </script>
 
 <style lang="less" scoped>
-
 .header {
     padding: 4px;
     margin-bottom: 1px;
@@ -95,11 +95,12 @@ window.background.maximized((e, max) =>
             &:hover {
                 background-color: rgba(128, 128, 128, .3);
                 cursor: pointer;
+                box-shadow: 2px 2px rgba(0, 0, 0, .1);
             }
 
             &:last-of-type {
                 &:hover {
-                    background-color: rgba(255, 0, 0, .5);
+                    background-color: rgba(255, 32, 32, .8);
                 }
             }
 
@@ -112,13 +113,6 @@ html.dark {
     .header {
         box-shadow: 0px 1px rgba(255, 255, 255, 0.2);
 
-        .btns {
-            .el-icon {
-                &:hover {
-                    background-color: rgba(255, 255, 255, .3);
-                }
-            }
-        }
     }
 }
 </style>
