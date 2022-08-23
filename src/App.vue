@@ -25,7 +25,7 @@ window.background.setAsTray((e, setted) =>
 <style lang="less">
 @font-face {
     font-family: 'FiraCodeRetina';
-    src: url("assets/fonts/FiraCode-Retina.ttf");
+    src: url("./assets/fonts/FiraCode-Retina.ttf");
 }
 
 * {

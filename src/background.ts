@@ -4,7 +4,6 @@ import { app, protocol, BrowserWindow, ipcMain, } from 'electron'
 import { Tray, nativeImage } from "electron";
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
-
 import path from 'path'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
