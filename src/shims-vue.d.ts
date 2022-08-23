@@ -5,7 +5,8 @@ declare module '*.vue' {
   export interface IElectronAPI
   {
    ipc:IpcRenderer,
-   resized: (callback: (e: IpcRendererEvent, maximized: boolean) => void) => void
+   maximized: (callback: (e: IpcRendererEvent, maximized: boolean) => void) => void,
+   resize: (callback: (e: IpcRendererEvent, size:number[]) => void) => void,
   }
 
   declare global

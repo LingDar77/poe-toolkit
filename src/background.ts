@@ -31,11 +31,17 @@ function RegisterHandlers(window: BrowserWindow)
   });
   window.on('maximize', () =>
   {
-    window.webContents.send('window.resized', true);
+    window.webContents.send('window.maximized', true);
+    window.webContents.send('window.resized', window.getSize());
   });
   window.on('unmaximize', () =>
   {
-    window.webContents.send('window.resized', false);
+    window.webContents.send('window.maximized', false);
+    window.webContents.send('window.resized', window.getSize());
+  });
+  window.on('resize', () =>
+  {
+    window.webContents.send('window.resized', window.getSize());
   });
 }
 

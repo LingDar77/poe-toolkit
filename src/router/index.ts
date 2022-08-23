@@ -22,13 +22,23 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/',
-    name: 'flasksLoop',
-    component: ()=>import('@/views/FlasksLoopView.vue')
+    name: 'flasksLoops',
+    component: ()=>import('@/views/FlasksLoopsView.vue')
   },
   {
     path: '/',
     name: 'cleanPackage',
     component: ()=>import('@/views/CleanPackageView.vue')
+  },
+  {
+    path: '/',
+    name: 'timeRecorder',
+    component: ()=>import('@/views/TimeRecorderView.vue')
+  },
+  {
+    path: '/',
+    name: 'itemQueryer',
+    component: ()=>import('@/views/ItemQueryerView.vue')
   },
 ]
 

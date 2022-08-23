@@ -20,5 +20,6 @@ import MainBody from "@/components/MainBody.vue";
     padding: 0;
     margin: 0;
     text-decoration: none;
+    overflow: hidden;
 }
 </style>

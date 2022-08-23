@@ -1,0 +1,3 @@
+<template>
+    flasksLoops
+</template>

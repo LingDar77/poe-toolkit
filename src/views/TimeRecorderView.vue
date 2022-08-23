@@ -1,3 +1,3 @@
 <template>
-    flasksLoop
+    timeRecorder
 </template>
