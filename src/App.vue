@@ -24,12 +24,12 @@ window.background.setAsTray((e, setted) =>
 
 <style lang="less">
 @font-face {
-    font-family: 'FiraCodeRetina';
-    src: url("./assets/fonts/FiraCode-Retina.ttf");
+    font-family: "Fira Code Retina";
+    src: url('~@/assets/FiraCode-Retina.ttf');
 }
 
 * {
-    font-family: 'FiraCodeRetina';
+    font-family: 'Fira Code Retina';
     padding: 0;
     margin: 0;
     text-decoration: none;

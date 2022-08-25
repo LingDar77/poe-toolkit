@@ -104,7 +104,8 @@ function BuildMenu(tray: Tray, window: BrowserWindow)
 
 async function createWindow()
 {
-  let icon = nativeImage.createFromPath('src/assets/logo.ico');
+
+  let icon = nativeImage.createFromPath(path.join(process.env.WEBPACK_DEV_SERVER_URL ? 'public' : __dirname, 'logo.ico'));
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
