@@ -1,3 +1,5 @@
 <template>
-    manaMonitor
+    <div>
+        manaMonitor
+    </div>
 </template>

@@ -1,3 +1,5 @@
 <template>
-    lifeMonitor
+    <div>
+        lifeMonitor
+    </div>
 </template>

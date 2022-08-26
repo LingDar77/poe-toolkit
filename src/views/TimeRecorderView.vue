@@ -1,3 +1,5 @@
 <template>
-    timeRecorder
+    <div>
+        timeRecorder
+    </div>
 </template>

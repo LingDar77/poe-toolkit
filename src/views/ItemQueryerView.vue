@@ -1,3 +1,5 @@
 <template>
-    itemQueryer
+    <div>
+        itemQueryer
+    </div>
 </template>p

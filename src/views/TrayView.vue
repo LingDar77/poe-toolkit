@@ -52,12 +52,13 @@
 import { useDark, useToggle } from '@vueuse/core';
 import { ElScrollbar } from 'element-plus';
 import { ref } from 'vue';
-
+import { saveConfig } from '@/config';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
 const trayQuit = () =>
 {
+    saveConfig();
     window.background.close();
 }
 window.background.toggledDark((e, dark) =>

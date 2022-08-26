@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useDark, useToggle } from '@vueuse/core';
-
+import { saveConfig } from '@/config';
 const isDark = useDark();
 function toggleDark(){
    useToggle(isDark)();
@@ -66,6 +66,7 @@ const maximize = () =>
 }
 const close = () =>
 {
+    saveConfig();
     window.background.close();
 }
 

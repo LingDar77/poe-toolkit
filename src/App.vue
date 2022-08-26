@@ -1,14 +1,23 @@
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from "vue";
+import { parseConfig } from '@/config';
+import { ref, defineAsyncComponent, onUnmounted } from "vue";
 const Tray = defineAsyncComponent(() => import("@/views/TrayView.vue"));
 const Topbar = defineAsyncComponent(() => import("@/components/Topbar.vue"));
 const MainBody = defineAsyncComponent(() => import("@/components/MainBody.vue"));
 const isTray = ref(false);
+parseConfig();
+
+
+
+
+
+
 window.background.setAsTray((e, setted) =>
 {
     isTray.value = setted;
 });
+
 
 </script>
 

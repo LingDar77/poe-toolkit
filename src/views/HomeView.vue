@@ -1,4 +1,9 @@
 <template>
-    home
+    <div>
+        home
+    </div>
 </template>
-    
+<script lang ='ts' setup>
+
+
+</script>

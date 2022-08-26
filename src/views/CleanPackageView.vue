@@ -1,3 +1,6 @@
 <template>
-    cleanPackage
+    <div>
+        cleanPackage
+    </div>
+
 </template>

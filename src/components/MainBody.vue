@@ -2,7 +2,7 @@
     <div class="container">
 
         <el-scrollbar :height="scrollbarHeight">
-            <el-menu default-active="0" :collapse="isPanelCollapsed">
+            <el-menu default-active="0" :collapse="cfg.isPanelCollapsed">
                 <div @click="toggleCollapsed">
                     <el-icon>
                         <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-029747aa="">
@@ -116,16 +116,23 @@
                         <template #title>Settings</template>
                     </el-menu-item>
                 </router-link>
-                
+
             </el-menu>
         </el-scrollbar>
-        <router-view></router-view>
+        <router-view v-slot="{ Component }" v-if="cfg.enableAnimate">
+            <Transition enter-active-class="animate__animated animate__fadeInRight animate__faster"
+                leave-active-class="animate__animated animate__fadeOutLeft animate__faster">
+                <component :is="Component"></component>
+            </Transition>
+        </router-view>
+        <router-view v-else></router-view>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const isPanelCollapsed = ref(false);
+import { ref } from 'vue';
+import { config } from '@/config';
+let cfg = ref(config);
 const scrollbarHeight = ref(528);
 window.background.resize((e, newSize) =>
 {
@@ -134,11 +141,37 @@ window.background.resize((e, newSize) =>
 
 const toggleCollapsed = () =>
 {
-    isPanelCollapsed.value = !isPanelCollapsed.value;
+    console.log(config);
+
+    cfg.value.isPanelCollapsed = !cfg.value.isPanelCollapsed;
 }
 </script>
 
 <style lang="less" scoped>
+@import 'animate.css';
+
+.bounce-enter-active {
+    animation: bounce-in 0.5s;
+}
+
+.bounce-leave-active {
+    animation: bounce-in 0.5s reverse;
+}
+
+@keyframes bounce-in {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .container {
     display: flex;
     flex-direction: row;

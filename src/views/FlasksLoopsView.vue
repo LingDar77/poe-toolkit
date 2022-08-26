@@ -1,3 +1,6 @@
 <template>
-    flasksLoops
+    <div>
+        flasksLoops
+    </div>
+
 </template>
